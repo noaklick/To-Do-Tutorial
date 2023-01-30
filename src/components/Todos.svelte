@@ -8,7 +8,9 @@
 
 
     // #reactive: these variables will update whenever the todos array changes
+    // #statevariable: keeps track of the number of total todos
     $: totalTodos = todos.length
+    // #statevariable: keeps track of the number of completed todos
     $: completedTodos = todos.filter((todo) => todo.completed).length
 
     function removeTodo(todo) {
@@ -23,6 +25,7 @@
     }
 
     // #reactive: generating a new id for each todo as needed
+    // #statevariable: keeps track of the number of todos we have so we can make fresh ids
     let newTodoId
     $: {
         if (totalTodos === 0) {
@@ -51,7 +54,9 @@
       </h2>
       <!-- #properties we bind the the value of the variable to the value of the input -->
       <!-- noa note: this is super super cool. never seen a feature like this before -->
+      <!-- #text-exp: dynamically updating the value -->
       <input bind:value={newTodoName} type="text" id="todo-0" autocomplete="off" class="input input__lg" />
+      <!-- #button button to add a new todo -->
         <button type="submit" disabled="" class="btn btn__primary btn__lg">
         Add
       </button>
@@ -60,6 +65,7 @@
     <!-- Filter -->
     <!-- #reactive: updating the html for the filters -->
     <div class="filters btn-group stack-exception">
+      <!-- #button: button to show all of the todos -->
         <button class="btn toggle-btn" class:btn__primary={filter === 'all'} aria-pressed={filter === 'all'} on:click={() => filter = 'all'} >
           <span class="visually-hidden">Show</span>
           <span>All</span>
@@ -70,6 +76,7 @@
           <span>Active</span>
           <span class="visually-hidden">tasks</span>
         </button>
+        <!-- #button: button to only filter by completed todos -->
         <button class="btn toggle-btn" class:btn__primary={filter === 'completed'} aria-pressed={filter === 'completed'} on:click={() => filter = 'completed'} >
           <span class="visually-hidden">Show</span>
           <span>Completed</span>
@@ -92,15 +99,18 @@
       <div class="stack-small">
         <div class="c-cb">
             <!-- #reactive the curly braces let us use JavaScript in the HTML -->
+            <!-- #properties accessing the id of the todo -->
             <input type="checkbox" id="todo-{todo.id}"
             on:click={() => todo.completed = !todo.completed}
             checked={todo.completed}
           />
           
+          <!-- #text-exp dynamically adding the name of the todo -->
           <label for="todo-{todo.id}" class="todo-label"> {todo.name} </label>
         </div>
         <div class="btn-group">
           <button type="button" class="btn">
+            <!-- #text-exp: dynamically updating the name of the todo -->
             Edit <span class="visually-hidden">{todo.name}</span>
           </button>
           <button type="button" class="btn btn__danger"
